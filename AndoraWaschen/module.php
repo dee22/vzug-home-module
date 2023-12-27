@@ -31,7 +31,7 @@ class AndoraWaschen extends IPSModuleStrict
 			$form['elements'][] = [
 				"name" => "Model",
 				"type" => "Label",
-				"label" => "Modell: $model",
+				"label" => $model ? "Modell: $model" : '',
 			];
 		}
 		return json_encode($form);
