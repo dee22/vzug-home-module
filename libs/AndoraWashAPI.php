@@ -17,25 +17,26 @@ trait AndoraWashAPI {
 
     public function getSupportedLanguages(string $ip): array {
         return $this->request($ip, 'hh', 'getSupportedLanguages', true);
-        // [{lan: "de", desc: "Deutsch"}, ...]
     }
 
     public function getLanguage(string $ip): string {
-        return $this->request($ip, 'hh', 'getLanguage'); // de
+        return $this->request($ip, 'hh', 'getLanguage');
     }
 
     public function getTranslations(string $ip, string $lang): object {
         return $this->request($ip, 'ai', 'getProperty', true, "&value=$lang");
-        // { lan: 'de', language: 'Deutsch', overview: 'Übersicht', ... }
     }
 
     public function getZHMode(string $ip): object {
         return $this->request($ip, 'hh', 'getZHMode', true);
-        // { value: 2 }
     }
 
     public function getModelDescription(string $ip): string {
-        return $this->request($ip, 'ai', 'getModelDescription'); // AndoraWash V2000
+        return $this->request($ip, 'ai', 'getModelDescription');
+    }
+
+    public function getDeviceStatus(string $ip): object | null {
+        return $this->request($ip, 'ai', 'getDeviceStatus', true);
     }
 
     public function getLastPUSHNotifications(string $ip): array {
