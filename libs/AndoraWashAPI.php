@@ -44,6 +44,18 @@ trait AndoraWashAPI {
         return $this->request($ip, 'ai', 'getLastPUSHNotifications', true);
     }
 
+    public function getSerialNumber(string $ip): string {
+        return $this->request($ip, 'ai', 'getSerialNumber');
+    }
+
+    public function getFWVersion(string $ip): object {
+        return $this->request($ip, 'ai', 'getFWVersion', true);
+    }
+
+    public function getFWVersionHome(string $ip): object {
+        return $this->request($ip, 'hh', 'getFWVersion', true);
+    }
+
     private function simulateRequest(string $endpoint, string $command, bool $jsonDecode, string $params) {
         $data = '';
         switch ($command) {
