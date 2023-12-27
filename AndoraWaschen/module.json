@@ -1,0 +1,12 @@
+{
+    "id": "{21379775-64AB-6F65-9840-341063866AE2}",
+    "name": "AndoraWaschen",
+    "type": 3,
+    "vendor": "V-Zug",
+    "aliases": [],
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "VZUG",
+    "url": ""
+}
