@@ -1,26 +1,37 @@
 <?php
 
 declare(strict_types=1);
+require_once __DIR__ . '/../libs/AndoraWashAPI.php';
 class AndoraWaschen extends IPSModule
 {
+	use AndoraWashAPI;
 	public function Create()
 	{
-		//Never delete this line!
 		parent::Create();
 		$this->RegisterPropertyString("IPAddress", "");
+		$this->RegisterAttributeString("Model", "");
 	}
 
 	public function Destroy()
 	{
-		//Never delete this line!
 		parent::Destroy();
 	}
 
 	public function ApplyChanges()
 	{
-		//Never delete this line!
 		parent::ApplyChanges();
+	}
+
+	public function GetConfigurationForm()
+	{
+		$configForm = parent::GetConfigurationForm();
+		print_r($configForm);
+		return '{ "actions": [ { "type": "Label", "label": "The current time is ' . date("d.m.y H:i") . '" } ] }';
+	}
+
+	public function RequestInfos()
+	{
 		$ip = $this->ReadPropertyString('IPAddress');
-		$response = file_get_contents("http://$ip/ai?command=getModelDescription&_=1690883064754");
+		$model = $this->getModelDescription($ip);
 	}
 }

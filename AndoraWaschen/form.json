@@ -5,6 +5,11 @@
             "name": "IPAddress",
             "validate": "^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}",
             "caption": "IP-Adresse"
+        },
+        {
+            "type": "Button",
+            "caption": "Daten Abfragen",
+            "onClick": "echo 'https://www.symcon.de';"
         }
     ],
     "actions": [],
