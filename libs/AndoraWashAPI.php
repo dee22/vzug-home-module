@@ -56,6 +56,10 @@ trait AndoraWashAPI {
         return $this->request($ip, 'hh', 'getFWVersion', true);
     }
 
+    public function getUpdateStatus(string $ip): object {
+        return $this->request($ip, 'ai', 'getUpdateStatus', true);
+    }
+
     private function simulateRequest(string $endpoint, string $command, bool $jsonDecode, string $params) {
         $data = '';
         switch ($command) {
