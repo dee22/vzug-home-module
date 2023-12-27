@@ -9,14 +9,14 @@
         {
             "type": "Button",
             "caption": "Daten Abfragen",
-            "onClick": "echo 'https://www.symcon.de';"
+            "onClick": "VZUG_UpdateInfos($id);"
         }
     ],
     "actions": [
         {
             "type": "Button",
             "caption": "Update Module",
-            "onClick": "echo 'https://www.symcon.de';"
+            "onClick": "VZUG_UpdateModule($id);"
         }
     ],
     "status": []

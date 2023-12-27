@@ -34,7 +34,7 @@ class AndoraWaschen extends IPSModuleStrict
 		return json_encode($form);
 	}
 
-	public function RequestInfos(): string
+	public function UpdateInfos(): string
 	{
 		$ip = $this->ReadPropertyString('IPAddress');
 		$model = $this->getModelDescription($ip);
