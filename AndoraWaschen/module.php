@@ -2,27 +2,27 @@
 
 declare(strict_types=1);
 require_once __DIR__ . '/../libs/AndoraWashAPI.php';
-class AndoraWaschen extends IPSModule
+class AndoraWaschen extends IPSModuleStrict
 {
 	use AndoraWashAPI;
-	public function Create()
+	public function Create(): void
 	{
 		parent::Create();
 		$this->RegisterPropertyString("IPAddress", "");
 		$this->RegisterAttributeString("Model", "");
 	}
 
-	public function Destroy()
+	public function Destroy(): void
 	{
 		parent::Destroy();
 	}
 
-	public function ApplyChanges()
+	public function ApplyChanges(): void
 	{
 		parent::ApplyChanges();
 	}
 
-	public function GetConfigurationForm()
+	public function GetConfigurationForm(): string
 	{
 		$formJson = file_get_contents(__DIR__ . '/form.json');
 		$form = json_decode($formJson, true);
@@ -34,9 +34,10 @@ class AndoraWaschen extends IPSModule
 		return json_encode($form);
 	}
 
-	public function RequestInfos()
+	public function RequestInfos(): string
 	{
 		$ip = $this->ReadPropertyString('IPAddress');
 		$model = $this->getModelDescription($ip);
+		return $model;
 	}
 }

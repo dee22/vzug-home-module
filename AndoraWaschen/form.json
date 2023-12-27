@@ -12,6 +12,12 @@
             "onClick": "echo 'https://www.symcon.de';"
         }
     ],
-    "actions": [],
+    "actions": [
+        {
+            "type": "Button",
+            "caption": "Update Module",
+            "onClick": "echo 'https://www.symcon.de';"
+        }
+    ],
     "status": []
 }
