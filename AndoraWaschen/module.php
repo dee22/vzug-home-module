@@ -25,11 +25,13 @@ class AndoraWaschen extends IPSModuleStrict {
 		$formJson = file_get_contents(__DIR__ . '/form.json');
 		$form = json_decode($formJson, true);
 		$model = $this->ReadAttributeString('Model');
-		$form['elements'][] = [
+		$this->UpdateFormField("Model", "label", $model);
+		/*
+		$form['elements'][2] = [
 			"name" => "Model",
 			"type" => "Label",
 			"label" => $model ? "Modell: $model" : '',
-		];
+		];*/
 		return json_encode($form);
 	}
 
@@ -38,18 +40,22 @@ class AndoraWaschen extends IPSModuleStrict {
 		$model = $this->getModelDescription($ip);
 		$this->WriteAttributeString('Model', $model);
 		$this->UpdateFormField("Model", "label", $model);
-		$this->ReloadForm();
+		//$this->ReloadForm();
 	}
 
 	public function ResetInfos(): void {
 		$this->WriteAttributeString('Model', '');
-		$this->ReloadForm();
+		$this->UpdateFormField("Model", "label", '');
+		//$this->ReloadForm();
 	}
 
-	public function UpdateModule() {
+	public function UpdateModule(string $moduleName = 'vzug-home-module') {
 		$mcInstanceID = IPS_GetInstanceIDByName('Modules', 0);
-		$moduleName = 'vzug-home-module';
 		MC_UpdateModule($mcInstanceID, $moduleName);
+	}
+
+	public function ReloadModule(string $moduleName = 'vzug-home-module') {
+		$mcInstanceID = IPS_GetInstanceIDByName('Modules', 0);
 		MC_ReloadModule($mcInstanceID, $moduleName);
 	}
 }

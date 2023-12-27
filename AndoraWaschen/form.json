@@ -12,7 +12,7 @@
             "onClick": "VZUG_UpdateInfos($id);"
         },
         {
-            "name": "Modell",
+            "name": "Model",
             "type": "Label",
             "label": ""
         }
@@ -21,7 +21,12 @@
         {
             "type": "Button",
             "caption": "Update Module",
-            "onClick": "VZUG_UpdateModule($id);"
+            "onClick": "VZUG_UpdateModule($id, 'vzug-home-module');"
+        },
+        {
+            "type": "Button",
+            "caption": "Reload Module",
+            "onClick": "VZUG_ReloadModule($id, 'vzug-home-module');"
         },
         {
             "type": "Button",
