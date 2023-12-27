@@ -10,6 +10,11 @@
             "type": "Button",
             "caption": "Daten Abfragen",
             "onClick": "VZUG_UpdateInfos($id);"
+        },
+        {
+            "name": "Modell",
+            "type": "Label",
+            "label": ""
         }
     ],
     "actions": [

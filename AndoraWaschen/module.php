@@ -2,28 +2,26 @@
 
 declare(strict_types=1);
 require_once __DIR__ . '/../libs/AndoraWashAPI.php';
-class AndoraWaschen extends IPSModuleStrict
-{
+class AndoraWaschen extends IPSModuleStrict {
 	use AndoraWashAPI;
-	public function Create(): void
-	{
+
+	public $isSimulated = false;
+	public function Create(): void {
 		parent::Create();
 		$this->RegisterPropertyString("IPAddress", "");
+		$this->RegisterPropertyBoolean("Simulated", false);
 		$this->RegisterAttributeString("Model", "");
 	}
 
-	public function Destroy(): void
-	{
+	public function Destroy(): void {
 		parent::Destroy();
 	}
 
-	public function ApplyChanges(): void
-	{
+	public function ApplyChanges(): void {
 		parent::ApplyChanges();
 	}
 
-	public function GetConfigurationForm(): string
-	{
+	public function GetConfigurationForm(): string {
 		$formJson = file_get_contents(__DIR__ . '/form.json');
 		$form = json_decode($formJson, true);
 		$model = $this->ReadAttributeString('Model');
@@ -35,22 +33,20 @@ class AndoraWaschen extends IPSModuleStrict
 		return json_encode($form);
 	}
 
-	public function UpdateInfos(): void
-	{
+	public function UpdateInfos(): void {
 		$ip = $this->ReadPropertyString('IPAddress');
 		$model = $this->getModelDescription($ip);
 		$this->WriteAttributeString('Model', $model);
 		$this->UpdateFormField("Model", "label", $model);
+		$this->ReloadForm();
 	}
 
-	public function ResetInfos(): void
-	{
+	public function ResetInfos(): void {
 		$this->WriteAttributeString('Model', '');
-		$this->UpdateFormField("Model", "label", '');
+		$this->ReloadForm();
 	}
 
-	public function UpdateModule()
-	{
+	public function UpdateModule() {
 		$mcInstanceID = IPS_GetInstanceIDByName('Modules', 0);
 		$moduleName = 'vzug-home-module';
 		MC_UpdateModule($mcInstanceID, $moduleName);
