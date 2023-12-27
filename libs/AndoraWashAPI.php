@@ -15,7 +15,7 @@ trait AndoraWashAPI {
         }
     }
 
-    public function getSupportedLanguages(string $ip): object {
+    public function getSupportedLanguages(string $ip): array {
         return $this->request($ip, 'hh', 'getSupportedLanguages', true);
         // [{lan: "de", desc: "Deutsch"}, ...]
     }
@@ -38,7 +38,7 @@ trait AndoraWashAPI {
         return $this->request($ip, 'ai', 'getModelDescription'); // AndoraWash V2000
     }
 
-    public function getLastPUSHNotifications(string $ip): string {
+    public function getLastPUSHNotifications(string $ip): array {
         return $this->request($ip, 'ai', 'getLastPUSHNotifications', true);
     }
 
