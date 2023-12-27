@@ -27,13 +27,11 @@ class AndoraWaschen extends IPSModuleStrict
 		$formJson = file_get_contents(__DIR__ . '/form.json');
 		$form = json_decode($formJson, true);
 		$model = $this->ReadAttributeString('Model');
-		if ($model) {
-			$form['elements'][] = [
-				"name" => "Model",
-				"type" => "Label",
-				"label" => $model ? "Modell: $model" : '',
-			];
-		}
+		$form['elements'][] = [
+			"name" => "Model",
+			"type" => "Label",
+			"label" => $model ? "Modell: $model" : '',
+		];
 		return json_encode($form);
 	}
 
