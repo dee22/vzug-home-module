@@ -27,19 +27,28 @@ class AndoraWaschen extends IPSModuleStrict
 		$formJson = file_get_contents(__DIR__ . '/form.json');
 		$form = json_decode($formJson, true);
 		$model = $this->ReadAttributeString('Model');
-		$form['elements'][] = [
-			"type" => "Label",
-			"label" => "Modell: $model",
-		];
+		if ($model) {
+			$form['elements'][] = [
+				"name" => "Model",
+				"type" => "Label",
+				"label" => "Modell: $model",
+			];
+		}
 		return json_encode($form);
 	}
 
-	public function UpdateInfos(): string
+	public function UpdateInfos(): void
 	{
 		$ip = $this->ReadPropertyString('IPAddress');
 		$model = $this->getModelDescription($ip);
 		$this->WriteAttributeString('Model', $model);
-		return $model;
+		$this->UpdateFormField("Model", "label", $model);
+	}
+
+	public function ResetInfos(): void
+	{
+		$this->WriteAttributeString('Model', '');
+		$this->UpdateFormField("Model", "label", '');
 	}
 
 	public function UpdateModule()

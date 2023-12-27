@@ -17,6 +17,11 @@
             "type": "Button",
             "caption": "Update Module",
             "onClick": "VZUG_UpdateModule($id);"
+        },
+        {
+            "type": "Button",
+            "caption": "Reset Infos",
+            "onClick": "VZUG_ResetInfos($id);"
         }
     ],
     "status": []
