@@ -38,6 +38,15 @@ class AndoraWaschen extends IPSModuleStrict
 	{
 		$ip = $this->ReadPropertyString('IPAddress');
 		$model = $this->getModelDescription($ip);
+		$this->WriteAttributeString('Model', $model);
 		return $model;
+	}
+
+	public function UpdateModule()
+	{
+		$mcInstanceID = IPS_GetInstanceIDByName('Modules', 0);
+		$moduleName = 'vzug-home-module';
+		MC_UpdateModule($mcInstanceID, $moduleName);
+		MC_ReloadModule($mcInstanceID, $moduleName);
 	}
 }
