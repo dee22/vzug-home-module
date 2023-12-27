@@ -13,6 +13,7 @@ trait AndoraWashAPI {
         if ($jsonDecode) {
             return json_decode($response);
         }
+        return $response;
     }
 
     public function getSupportedLanguages(string $ip): array {
