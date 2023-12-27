@@ -24,9 +24,14 @@ class AndoraWaschen extends IPSModule
 
 	public function GetConfigurationForm()
 	{
-		$configForm = parent::GetConfigurationForm();
-		print_r($configForm);
-		return '{ "actions": [ { "type": "Label", "label": "The current time is ' . date("d.m.y H:i") . '" } ] }';
+		$formJson = file_get_contents(__DIR__ . '/form.json');
+		$form = json_decode($formJson, true);
+		$model = $this->ReadAttributeString('Model');
+		$form['elements'][] = [
+			"type" => "Label",
+			"label" => "Modell: $model",
+		];
+		return json_encode($form);
 	}
 
 	public function RequestInfos()
