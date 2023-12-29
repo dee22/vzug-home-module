@@ -1,0 +1,27 @@
+{
+    "elements": [
+        {
+            "type": "Configurator",
+            "values": [
+                {
+                    "name": "V-Zug Home Discovery",
+                    "address": "Adresse",
+                    "create": {
+                        "moduleID": "{21379775-64AB-6F65-9840-341063866AE2}",
+                        "configuration": {},
+                        "statusVariables": {
+                            "Minimum": {
+                                "name": "Alternativer Name für Minimum"
+                            },
+                            "Maximum": {
+                                "name": "Alternativer Name für Maximum"
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "actions": [],
+    "status": []
+}

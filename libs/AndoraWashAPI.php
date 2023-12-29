@@ -10,12 +10,24 @@ trait AndoraWashAPI {
         }
         $milliseconds = floor(microtime(true) * 1000);
         $parameters = implode('&', array_merge(["command=$command"], $params, ["_=$milliseconds"]));
-        $response = file_get_contents("http://$ip/$endpoint?$parameters");
-        $result = json_decode($response);
-        if (gettype($result) === 'NULL') {
-            return $response;
-        }
+        $requestUrl = "http://$ip/$endpoint?$parameters";
+        $this->SendDebug('API Request', $requestUrl, 0);
+        $response = file_get_contents($requestUrl);
+        $result = (gettype(json_decode($response)) === 'NULL' ? $response : json_decode($response));
+        $this->SendDebug('API Response', $response, 0);
         return $result;
+    }
+
+    public function checkUpdate(string $ip): string {
+        return $this->request($ip, 'ai', 'checkUpdate'); // check
+    }
+
+    public function setDeviceName(string $ip, string $value = 'AdoraWash V????'): void {
+        $this->request($ip, 'hh', 'setDeviceName', ["value=$value"]);
+    }
+
+    public function setCommand(string $ip, string $command = 'buttonXtone', $value): object {
+        return $this->request($ip, 'hh', 'set' . $command, ["value=$value"]);
     }
 
     // START GENERATED CODE

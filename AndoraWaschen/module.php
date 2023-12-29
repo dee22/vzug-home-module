@@ -25,28 +25,64 @@ class AndoraWaschen extends IPSModuleStrict {
 		$formJson = file_get_contents(__DIR__ . '/form.json');
 		$form = json_decode($formJson, true);
 		$model = $this->ReadAttributeString('Model');
-		$this->UpdateFormField("Model", "label", $model);
-		/*
+		$modelText = $model ? "Modell: $model" : "";
 		$form['elements'][2] = [
 			"name" => "Model",
 			"type" => "Label",
-			"label" => $model ? "Modell: $model" : '',
-		];*/
+			"label" => $modelText,
+		];
 		return json_encode($form);
 	}
+
+	// API Wrappers
+
+	public function getProgramStatus() {
+		$ip = $this->ReadPropertyString('IPAddress');
+		$zhMode = $this->getZHMode($ip);
+		$deviceStatus = $this->getDeviceStatus($ip);
+		$lastPushNotifications = $this->getLastPUSHNotifications($ip);
+		return [
+			'deviceStatus' => $deviceStatus,
+			'lastPushNotifications' => $lastPushNotifications,
+		];
+	}
+
+	public function getUserSettings() {
+		$ip = $this->ReadPropertyString('IPAddress');
+		$retries = 2;
+		$results = [];
+		for ($try = 0; $try <= $retries; $try++) {
+			$categoriesList = $this->getCategories($ip);
+			foreach ($categoriesList as $category) {
+				$commandList = $this->getCommands($ip, $category);
+				$categoryProps = $this->getCategory($ip, $category);
+				$categoryProps->commandNames = $commandList;
+				$categoryProps->commands = [];
+				foreach ($commandList as $commandName) {
+					$command = $this->getCommand($ip, $commandName);
+					$categoryProps->commands[] = $command;
+				}
+				$results[$category] = $categoryProps;
+				break 2;
+			}
+		}
+		return $results;
+	}
+
+	// Tests
 
 	public function UpdateInfos(): void {
 		$ip = $this->ReadPropertyString('IPAddress');
 		$model = $this->getModelDescription($ip);
 		$this->WriteAttributeString('Model', $model);
-		$this->UpdateFormField("Model", "label", $model);
-		//$this->ReloadForm();
+		//$this->UpdateFormField("Model", "label", $model);
+		$this->ReloadForm();
 	}
 
 	public function ResetInfos(): void {
 		$this->WriteAttributeString('Model', '');
-		$this->UpdateFormField("Model", "label", '');
-		//$this->ReloadForm();
+		//$this->UpdateFormField("Model", "label", '');
+		$this->ReloadForm();
 	}
 
 	public function UpdateModule(string $moduleName = 'vzug-home-module') {

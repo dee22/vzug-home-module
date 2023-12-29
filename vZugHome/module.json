@@ -1,0 +1,14 @@
+{
+    "id": "{8766466F-1318-2973-EE5F-1A7B19BAAE9D}",
+    "name": "vZugHome",
+    "type": 5,
+    "vendor": "V-Zug",
+    "aliases": [
+        ""
+    ],
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "VDSC",
+    "url": ""
+}
