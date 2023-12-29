@@ -11,6 +11,7 @@ class AndoraWaschen extends IPSModuleStrict {
 		$this->RegisterPropertyString("IPAddress", "");
 		$this->RegisterPropertyBoolean("Simulated", false);
 		$this->RegisterAttributeString("Model", "");
+		$this->RegisterAttributeString("Debug", "");
 	}
 
 	public function Destroy(): void {
@@ -35,6 +36,12 @@ class AndoraWaschen extends IPSModuleStrict {
 				];
 			}
 		}
+		$debugMsg = $this->ReadAttributeString('Debug');
+		$form['elements'][] = [
+			"name" => "Debug",
+			"type" => "Label",
+			"label" => $debugMsg,
+		];
 		return json_encode($form);
 	}
 
@@ -87,5 +94,69 @@ class AndoraWaschen extends IPSModuleStrict {
 		$this->WriteAttributeString('Model', '');
 		//$this->UpdateFormField("Model", "label", '');
 		$this->ReloadForm();
+	}
+
+	public function DoReload() {
+		// START CONFIG
+		$moduleName = 'vzug-home-module';
+		$fromRemote = true;
+		$forceMethod = ['', 'reload', 'update', 'revert', 'recreate'][0];
+		// END CONFIG
+
+		$mcid = IPS_GetInstanceIDByName('Modules', 0);
+		$success = $this->RefreshModule($moduleName, $fromRemote, $forceMethod);
+		$text = 'Module update ' . ($success ? 'was successful!' : 'failed!') . "\n\n";
+		$text = "Module Health:\n";
+		$text = "Clean: " . (MC_IsModuleClean($mcid, $moduleName) ? 'Yes' : 'No') . "\n";
+		$text = "Valid: " . (MC_IsModuleValid($mcid, $moduleName) ? 'Yes' : 'No') . "\n";
+		$this->WriteAttributeString('Debug', $text);
+	}
+
+	/**
+	 * This function does reload, revert, update or recreate a Module.
+	 * $moduleName string The name of the Module to refresh.
+	 * $allowUpdate bool Set to true to allow updating from GitHub. Tries to revert and recreate if update fails.
+	 * $forceMethod string Forces a specific method. Options ['reload', 'update', 'revert', 'recreate']
+	 */
+	function RefreshModule(string $moduleName, bool $fromRemote = true, string $forceMethod = ''): bool {
+		$mcid = IPS_GetInstanceIDByName('Modules', 0);
+		$repoUrl = @MC_GetModuleRepositoryInfo($mcid, $moduleName)['ModuleURL'];
+
+		$canUpdate = fn () => $fromRemote && @MC_IsModuleUpdateAvailable($mcid, $moduleName);
+		$reload = fn () => @MC_ReloadModule($mcid, $moduleName);
+		$update = fn () => ($canUpdate ? @MC_UpdateModule($mcid, $moduleName) : true);
+		$revert = fn () => ($fromRemote ? @MC_RevertModule($mcid, $moduleName) : true);
+		$delete = fn () => ($fromRemote ? ($repoUrl ? @MC_DeleteModule($mcid, $moduleName) : true) : true);
+		$create = fn () => ($fromRemote ? ($repoUrl ? @MC_CreateModule($mcid, $repoUrl) : true) : true);
+		$forcing = fn (string $opt) => (empty($forceMethod) || $opt === $forceMethod);
+
+		$methods = [
+			'reload' => fn () => $forcing('reload') && !$canUpdate() && $reload(),
+			'update' => fn () => $forcing('update') && ($update() && $reload()),
+			'revert' => fn () => $forcing('revert') && ($revert() && $update() && $reload()),
+			'recreate' => fn () => $forcing('recreate') && ($delete() && $create() && $reload()),
+		];
+
+		foreach ($methods as $methodName => $method) {
+			$result = $method();
+			if ($result) {
+				print_r("Executed Method: '$methodName'\n");
+				return $result;
+			}
+		}
+
+		// none of the update methods was sucessful
+		$methodNames = array_keys($methods);
+		$debugInfo = [
+			$forcing('reload'),
+			$forcing('update'),
+			$forcing('revert'),
+			$forcing('recreate')
+		];
+		$executed = array_map(fn ($name, $exec) => "$name | Executed: $exec, Success: false", $methodNames, $debugInfo);
+		$msg = "Execution failed! Debug: \nExecution Info: \n" . implode("\n", $debugInfo);
+		$this->WriteAttributeString('Debug', $msg);
+		$this->SendDebug('Module Update', $msg, 0);
+		return false;
 	}
 }
