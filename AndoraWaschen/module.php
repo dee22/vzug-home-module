@@ -84,14 +84,4 @@ class AndoraWaschen extends IPSModuleStrict {
 		//$this->UpdateFormField("Model", "label", '');
 		$this->ReloadForm();
 	}
-
-	public function UpdateModule(string $moduleName = 'vzug-home-module') {
-		$mcInstanceID = IPS_GetInstanceIDByName('Modules', 0);
-		MC_UpdateModule($mcInstanceID, $moduleName);
-	}
-
-	public function ReloadModule(string $moduleName = 'vzug-home-module') {
-		$mcInstanceID = IPS_GetInstanceIDByName('Modules', 0);
-		MC_ReloadModule($mcInstanceID, $moduleName);
-	}
 }
