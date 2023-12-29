@@ -37,13 +37,12 @@ class AndoraWaschen extends IPSModuleStrict {
 			}
 		}
 		$debugMsg = $this->ReadAttributeString('Debug');
-		foreach (explode("\n", $debugMsg) as $idx => $msg) {
-			$form['elements'][] = [
-				"name" => "Debug$idx",
-				"type" => "Label",
-				"label" => $msg,
-			];
-		}
+		$form['elements'][] = [
+			"name" => "Debug",
+			"type" => "Label",
+			"label" => $debugMsg,
+		];
+		$this->WriteAttributeString('Debug', '');
 		return json_encode($form);
 	}
 
@@ -107,10 +106,11 @@ class AndoraWaschen extends IPSModuleStrict {
 
 		$mcid = IPS_GetInstanceIDByName('Modules', 0);
 		$success = $this->RefreshModule($moduleName, $fromRemote, $forceMethod);
-		$text = 'Module update ' . ($success ? 'was successful!' : 'failed!') . "\n\n";
-		$text = "Module Health:\n";
-		$text = "Clean: " . (MC_IsModuleClean($mcid, $moduleName) ? 'Yes' : 'No') . "\n";
-		$text = "Valid: " . (MC_IsModuleValid($mcid, $moduleName) ? 'Yes' : 'No') . "\n";
+		$text = $this->ReadAttributeString('Debug');
+		$text .= 'Module update ' . ($success ? 'was successful!' : 'failed!') . "\n\n";
+		$text .= "Module Health:\n";
+		$text .= "Clean: " . (MC_IsModuleClean($mcid, $moduleName) ? 'Yes' : 'No') . "\n";
+		$text .= "Valid: " . (MC_IsModuleValid($mcid, $moduleName) ? 'Yes' : 'No') . "\n";
 		$this->WriteAttributeString('Debug', $text);
 	}
 
@@ -142,7 +142,7 @@ class AndoraWaschen extends IPSModuleStrict {
 		foreach ($methods as $methodName => $method) {
 			$result = $method();
 			if ($result) {
-				print_r("Executed Method: '$methodName'\n");
+				$this->WriteAttributeString('Debug', "Executed Method: '$methodName'\n");
 				return $result;
 			}
 		}
