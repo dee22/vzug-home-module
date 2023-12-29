@@ -24,13 +24,17 @@ class AndoraWaschen extends IPSModuleStrict {
 	public function GetConfigurationForm(): string {
 		$formJson = file_get_contents(__DIR__ . '/form.json');
 		$form = json_decode($formJson, true);
-		$model = $this->ReadAttributeString('Model');
-		$modelText = $model ? "Modell: $model" : "";
-		$form['elements'][2] = [
-			"name" => "Model",
-			"type" => "Label",
-			"label" => $modelText,
-		];
+		$ip = $this->ReadPropertyString('IPAddress');
+		if ($ip) {
+			$model = $this->ReadAttributeString('Model');
+			if ($model) {
+				$form['elements'][] = [
+					"name" => "Model",
+					"type" => "Label",
+					"label" => "Modell: $model",
+				];
+			}
+		}
 		return json_encode($form);
 	}
 
