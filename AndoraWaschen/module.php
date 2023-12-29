@@ -37,11 +37,13 @@ class AndoraWaschen extends IPSModuleStrict {
 			}
 		}
 		$debugMsg = $this->ReadAttributeString('Debug');
-		$form['elements'][] = [
-			"name" => "Debug",
-			"type" => "Label",
-			"label" => $debugMsg,
-		];
+		foreach (explode("\n", $debugMsg) as $idx => $msg) {
+			$form['elements'][] = [
+				"name" => "Debug$idx",
+				"type" => "Label",
+				"label" => $msg,
+			];
+		}
 		return json_encode($form);
 	}
 
