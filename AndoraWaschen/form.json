@@ -26,7 +26,7 @@
         {
             "type": "Button",
             "caption": "Refresh Module",
-            "onClick": "DoReload($id);"
+            "onClick": "VZUG_DoReload($id);"
         }
     ],
     "status": []
