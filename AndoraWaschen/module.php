@@ -107,10 +107,9 @@ class AndoraWaschen extends IPSModuleStrict {
 		$mcid = IPS_GetInstanceIDByName('Modules', 0);
 		$success = $this->RefreshModule($moduleName, $fromRemote, $forceMethod);
 		$text = $this->ReadAttributeString('Debug');
-		$text .= 'Module update ' . ($success ? 'was successful!' : 'failed!') . "\n\n";
-		$text .= "Module Health:\n";
-		$text .= "Clean: " . (MC_IsModuleClean($mcid, $moduleName) ? 'Yes' : 'No') . "\n";
-		$text .= "Valid: " . (MC_IsModuleValid($mcid, $moduleName) ? 'Yes' : 'No') . "\n";
+		$text = 'Module update ' . ($success ? 'was successful!' : 'failed!') . "\n\n$text";
+		$text .= "Module is Clean: " . (MC_IsModuleClean($mcid, $moduleName) ? 'Yes' : 'No') . "\n";
+		$text .= "Module is Valid: " . (MC_IsModuleValid($mcid, $moduleName) ? 'Yes' : 'No') . "\n";
 		$this->WriteAttributeString('Debug', $text);
 	}
 
